@@ -26,7 +26,7 @@ $api_client = new Patreon\API($access_token);
 $campaign_response = $api_client->fetch_campaign();
 
 // If the token doesn't work, get a newer one
-if ($campaign_response['errors']) {
+if (isset($campaign_response['errors'])) {
     // Make an OAuth client
     // Get your Client ID and Secret from https://www.patreon.com/platform/documentation/clients
     $client_id = null;
@@ -64,7 +64,10 @@ while (true) {
         echo $patron_full_name . " is pledging " . $pledge_amount . " cents.\n";
     }
     // get the link to the next page of pledges
-    $next_link = $pledges_response['links']['next'];
+    $next_link = null;
+    if (isset($pledges_response['links']['next'])) {
+        $next_link = isset($pledges_response['links']['next']);
+    };
     if (!$next_link) {
         // if there's no next page, we're done!
         break;
